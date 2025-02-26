@@ -6,8 +6,6 @@ public class GameScene : ISceneUpdate
     Snake snake;
     Food food;
 
-    int updateIndex = 0;
-
     public GameScene()
     {
         map = new Map();
@@ -15,44 +13,46 @@ public class GameScene : ISceneUpdate
         food = new Food(snake);
     }
 
+    void HandleDirectionalInput()
+    {
+        switch (Console.ReadKey(true).Key)
+        {
+            case ConsoleKey.W:
+                snake.ChangeDir(EMoveDir.Up);
+                break;
+            case ConsoleKey.A:
+                snake.ChangeDir(EMoveDir.Left);
+                break;
+            case ConsoleKey.S:
+                snake.ChangeDir(EMoveDir.Down);
+                break;
+            case ConsoleKey.D:
+                snake.ChangeDir(EMoveDir.Right);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
     public void Update()
     {
-        if (++updateIndex % 3000 == 0)
+        Thread directionInputThread = new Thread(HandleDirectionalInput)
         {
-            map.Draw();
-            food.Draw();
-            
-            snake.Move();
-            snake.Draw();
-            
-            if (snake.CheckEnd(map))
-            {
-                Game.ChangeScene(ESceneType.End);
-            }
+            IsBackground = true
+        };
+        directionInputThread.Start();
 
-            snake.CheckEatFood(food);
-            updateIndex = 0;
+        map.Draw();
+        food.Draw();
+
+        snake.Move();
+        snake.Draw();
+
+        if (snake.CheckEnd(map))
+        {
+            Game.ChangeScene(ESceneType.End);
         }
 
-        if (Console.KeyAvailable)
-        {
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.W:
-                    snake.ChangeDir(EMoveDir.Up);
-                    break;
-                case ConsoleKey.A:
-                    snake.ChangeDir(EMoveDir.Left);
-                    break;
-                case ConsoleKey.S:
-                    snake.ChangeDir(EMoveDir.Down);
-                    break;
-                case ConsoleKey.D:
-                    snake.ChangeDir(EMoveDir.Right);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        snake.CheckEatFood(food);
     }
 }
