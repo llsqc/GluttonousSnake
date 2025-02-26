@@ -124,4 +124,9 @@ public class Snake : IDraw
         bodies[nowLength] = new SnakeBody(ESnakeBodyType.Body, frontBody.pos.X, frontBody.pos.Y);
         nowLength++;
     }
+
+    public int GetLength()
+    {
+        return nowLength;
+    }
 }

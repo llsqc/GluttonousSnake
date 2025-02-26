@@ -14,10 +14,11 @@ public class Game
     // 游戏窗口宽高
     public const int width = 80;
     public const int height = 20;
-    public const int speed = 200;
+    public int currentSpeed;
 
     // 当前选中的场景
     public static ISceneUpdate nowScene = new BeginScene();
+
 
     public Game()
     {
@@ -36,7 +37,13 @@ public class Game
         {
             if (nowScene != null)
             {
-                Thread.Sleep(speed);
+                if (nowScene is GameScene)
+                {
+                    currentSpeed = (nowScene as GameScene).currentSpeed;
+                    Debug.WriteLine($"Current Speed: {currentSpeed}ms");
+                }
+
+                Thread.Sleep(currentSpeed);
                 nowScene.Update();
             }
         }
