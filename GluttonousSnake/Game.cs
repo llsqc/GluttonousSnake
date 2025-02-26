@@ -39,7 +39,7 @@ public class Game
             {
                 if (nowScene is GameScene)
                 {
-                    currentSpeed = (nowScene as GameScene).currentSpeed;
+                    currentSpeed = (nowScene as GameScene).GetCurrentSpeed();
                     Debug.WriteLine($"Current Speed: {currentSpeed}ms");
                 }
 
